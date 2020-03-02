@@ -32,6 +32,8 @@ ehthumbs_vista.db
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
+.gradle
+
 # Windows Installer files
 *.cab
 *.msi
@@ -158,7 +160,6 @@ dist
 
 ### macOS template
 # General
-.DS_Store
 .AppleDouble
 .LSOverride
 
