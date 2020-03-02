@@ -32,6 +32,8 @@ class Component extends React.PureComponent {
         language,
       })
     };
+
+    // setup global functions for Android WebView to call
     /**
      * style name
      * @param hljsStyle
@@ -56,15 +58,21 @@ class Component extends React.PureComponent {
         that.setState({startingLineNumber: parseInt(startingLineNumber)})
       }
     };
-    try {
-      // noinspection JSUnresolvedVariable,JSUnresolvedFunction
+    // Call Android JavaScriptInterface functions to send data and notify componentDidMount
+    try { // noinspection JSUnresolvedVariable,JSUnresolvedFunction
       window.AndroidSyntaxHighlightView.listStyles(JSON.stringify(this.listStyles()));
-      // noinspection JSUnresolvedVariable,JSUnresolvedFunction
+    } catch (e) {
+      console.error(e);
+    }
+    try { // noinspection JSUnresolvedVariable,JSUnresolvedFunction
       window.AndroidSyntaxHighlightView.listSupportedLanguages(JSON.stringify(SyntaxHighlighter.supportedLanguages));
-      // noinspection JSUnresolvedVariable,JSUnresolvedFunction
+    } catch (e) {
+      console.error(e);
+    }
+    try { // noinspection JSUnresolvedVariable,JSUnresolvedFunction
       window.AndroidSyntaxHighlightView.componentDidMount();
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
   }
 
@@ -85,7 +93,7 @@ class Component extends React.PureComponent {
   render() {
     const {style} = this.state;
     return (
-      <div style={{height: '100%', background: style.hljs.background, }}>
+      <div style={{height: '100%', background: style.hljs.background,}}>
         <SyntaxHighlighter
           language={this.state.language}
           style={style}
