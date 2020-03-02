@@ -26,7 +26,7 @@ class Component extends React.PureComponent {
     const that = this;
     window.setCodeString = (codeString, language) => {
       // codeString are encoded as base64 string to keep line breakers.
-      const decodedData = window.atob(codeString);
+      const decodedData = decodeURIComponent(window.atob(codeString));
       that.setState({
         codeString: decodedData,
         language,
