@@ -13,8 +13,8 @@ class Component extends React.PureComponent {
    * @type {{wrapLines: boolean, showLineNumbers: boolean, codeString: string, startingLineNumber: number, language: string, style: {"hljs-name": {color: string}, "hljs-attribute": {color: string}, "hljs-meta": {color: string}, "hljs-subst": {color: string}, "hljs-variable": {color: string}, "hljs-template-tag": {color: string}, "hljs-comment": {color: string}, "hljs-builtin-name": {color: string}, "hljs-built_in": {color: string}, "hljs-title": {color: string}, "hljs-regexp": {color: string}, "hljs-quote": {color: string}, "hljs-symbol": {color: string}, "hljs-doctag": {fontWeight: string}, "hljs-template-variable": {color: string}, "hljs-selector-tag": {color: string}, "hljs-literal": {color: string}, "hljs-link": {color: string}, "hljs-deletion": {color: string}, "hljs-section": {color: string, fontWeight: string}, "hljs-type": {color: string}, "hljs-selector-class": {color: string}, "hljs-strong": {fontWeight: string}, "hljs-bullet": {color: string}, "hljs-number": {color: string}, "hljs-addition": {color: string}, "hljs-emphasis": {fontStyle: string}, "hljs-selector-id": {color: string}, hljs: {padding: string, overflowX: string, color: string, background: string, display: string}, "hljs-string": {color: string}, "hljs-keyword": {color: string}}}}
    */
   state = {
-    codeString: "",
-    language: "text",
+    codeString: '',
+    language: 'text',
     style: hljsStyles.arta,
     showLineNumbers: true,
     wrapLines: true,
@@ -26,7 +26,7 @@ class Component extends React.PureComponent {
     const that = this;
     window.setCodeString = (codeString, language) => {
       // codeString are encoded as base64 string to keep line breakers.
-      const decodedData = decodeURIComponent(window.atob(codeString));
+      const decodedData = decodeURIComponent(escape(window.atob(codeString)));
       that.setState({
         codeString: decodedData,
         language,
@@ -53,12 +53,12 @@ class Component extends React.PureComponent {
     };
     window.setStartingLineNumber = startingLineNumber => {
       if (!isNaN(startingLineNumber)) {
-        that.setState({startingLineNumber:parseInt(startingLineNumber)})
+        that.setState({startingLineNumber: parseInt(startingLineNumber)})
       }
     };
     try {
       // noinspection JSUnresolvedVariable,JSUnresolvedFunction
-      window.AndroidSyntaxHighlightView.listStyles(JSON.stringify(Object.keys(hljsStyles)));
+      window.AndroidSyntaxHighlightView.listStyles(JSON.stringify(this.listStyles()));
       // noinspection JSUnresolvedVariable,JSUnresolvedFunction
       window.AndroidSyntaxHighlightView.listSupportedLanguages(JSON.stringify(SyntaxHighlighter.supportedLanguages));
       // noinspection JSUnresolvedVariable,JSUnresolvedFunction
@@ -68,10 +68,24 @@ class Component extends React.PureComponent {
     }
   }
 
+  listStyles() {
+    const styles = [];
+    Object.keys(hljsStyles).forEach(function (name) {
+      try {
+        const {background, color} = hljsStyles[name].hljs;
+        styles.push({name, background, color})
+      } catch (e) {
+        console.error(e);
+      }
+    });
+    return styles;
+  }
+
+
   render() {
     const {style} = this.state;
     return (
-      <div style={{height: '100%', background: style.hljs.background}}>
+      <div style={{height: '100%', background: style.hljs.background, }}>
         <SyntaxHighlighter
           language={this.state.language}
           style={style}

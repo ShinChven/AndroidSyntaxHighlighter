@@ -22,7 +22,7 @@ class SyntaxHighlightView : WebView {
         defStyleAttr: Int
     ) : super(context, attrs, defStyleAttr)
 
-    val styles: ArrayList<String> = ArrayList()
+    val styles: ArrayList<HljsStyle> = ArrayList()
     val supportedLanguages: ArrayList<String> = ArrayList()
 
     var callback: Callback? = null
@@ -32,27 +32,36 @@ class SyntaxHighlightView : WebView {
         this.callback = callback
         this.settings.javaScriptEnabled = true
         this.settings.javaScriptCanOpenWindowsAutomatically = true
+        this.settings.setSupportZoom(true)
+        this.settings.builtInZoomControls = true
+        this.settings.displayZoomControls = false
         this.loadUrl("file:///android_asset/syntax-highlighter/index.html")
         this.addJavascriptInterface(
             JavaScriptInterface(context,
                 object : JavaScriptInterfaceCallback {
                     override fun listStyles(styleNames: String?) {
                         if (styleNames != null) {
-                            val gson = Gson()
-                            val list = gson.fromJson(styleNames, Array<String>::class.java).toList()
-                            styles.addAll(list)
-                            callback?.listStyles(styles)
+                            try {
+                                val gson = Gson()
+                                val list = gson.fromJson(styleNames, Array<HljsStyle>::class.java).toList()
+                                styles.addAll(list)
+                                callback?.listStyles(styles)
+                            } catch (e: Exception) {
+                            }
                         }
                     }
 
                     override fun listSupportedLanguages(supportedLanguagesString: String?) {
                         if (supportedLanguagesString != null) {
-                            val gson = Gson()
-                            val list =
-                                gson.fromJson(supportedLanguagesString, Array<String>::class.java)
-                                    .toList()
-                            supportedLanguages.addAll(list)
-                            callback?.listSupportedLanguages(supportedLanguages)
+                            try {
+                                val gson = Gson()
+                                val list =
+                                    gson.fromJson(supportedLanguagesString, Array<String>::class.java)
+                                        .toList()
+                                supportedLanguages.addAll(list)
+                                callback?.listSupportedLanguages(supportedLanguages)
+                            } catch (e: Exception) {
+                            }
                         }
                     }
 
@@ -117,7 +126,7 @@ class SyntaxHighlightView : WebView {
     }
 
     interface Callback {
-        fun listStyles(styles: ArrayList<String>)
+        fun listStyles(styles: ArrayList<HljsStyle>)
         fun listSupportedLanguages(supportedLanguages: ArrayList<String>)
         fun componentDidMount()
     }

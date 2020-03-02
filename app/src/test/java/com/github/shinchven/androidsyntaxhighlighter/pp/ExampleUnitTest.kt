@@ -1,4 +1,4 @@
-package com.github.shinchven.androidsyntaxhighlighter
+package com.github.shinchven.androidsyntaxhighlighter.pp
 
 import org.junit.Test
 
