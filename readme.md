@@ -2,7 +2,7 @@
 
 This is a wrapper of the [react-syntax-highlighter](https://www.npmjs.com/package/react-syntax-highlighter) for Android to display code with syntax highlight.
 
-This is an early build for my app to view source code of websites. If you want to try it out please donload [Magic Feed](https://play.google.com/store/apps/details?id=net.atlassc.shinchven.sharemoments) from Google play store and see for the `view-source` feature which is an intent-filter for URL(ACTION_SEND, text/plain).
+This is an early build for my app to view source code of websites. If you want to try it out please download [Magic Feed](https://play.google.com/store/apps/details?id=net.atlassc.shinchven.sharemoments) from Google play store and see for the `view-source` feature which is an intent-filter for URL(ACTION_SEND, text/plain).
 
 <img align="center" width="300" src="https://github.com/ShinChven/AndroidSyntaxHighlighter/raw/master/screenshot/Screenshot_1583156360.png">
 
